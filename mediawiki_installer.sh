@@ -1,16 +1,15 @@
 #! /bin/bash
-# #######################
+# ####################################
 # Mediawiki 1.30 installer script (using git)
 # Version : 1.1.180220
 # 
 # 미디어위키를 Git 으로 설치하는 스크립트 입니다. 스크립트를 동작시키는 폴더 하위에 생성합니다.
 # git : https://github.com/exizt/mediawiki_installer
-# #######################
-# cd "$(dirname "$0")"
+# ####################################
 script_dir=$(cd "$(dirname "$0")" && pwd)
 cd $script_dir
 
-wikiName="wiki_1_30_test"
+wikiName="wiki_1_30"
 wikiPath="$script_dir/$wikiName"
 
 # 1. git clone
@@ -26,6 +25,7 @@ cmd_cr_core_checkout="cd $wikiName && git checkout -b REL1_30 origin/REL1_30"
 cmd_cr_core_after="composer update && chown -R apache:apache images/"
 
 # 1.E. 명령어 실행 과 composer update 동작
+# execute commands (1) (2) (3)
 eval "$cmd_cr_core_git_clone && $cmd_cr_core_checkout && $cmd_cr_core_after"
 
 echo "has completed git cloning"
@@ -35,6 +35,8 @@ sleep 0.5
 # 2. skins 및 extensions 하위 생성
 # skins 와 extensions 폴더 하위 내용 생성
 # 작업이 완료되면, skins 와 extensions 폴더 내의 파일들이 생성된다.
+
+# 2번과 3번을 사용 안 하고, 한번에 스킨과 확장기능 전부를 설치하려면. 아래의 명령어를 사용한다.
 # git submodule update --init --recursive
 # 안전한 수동 방식으로 extension 과 skin 을 설치하자.
 
@@ -62,6 +64,7 @@ cd $wikiPath"/extensions"
 git clone https://github.com/HydraWiki/mediawiki-embedvideo.git EmbedVideo
 
 
+# 4. fin
 cd $wikiPath
 echo ''
 echo 'Mediawiki 1.30 installation has been completed.'
