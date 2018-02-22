@@ -12,16 +12,25 @@ cd $script_dir
 wikiName="wiki_1_30"
 wikiPath="$script_dir/$wikiName"
 
-# 1. git clone
-# git clone 하면서 폴더를 생성
+
+
+
+# ## 1. make mediawiki core ## 
+
+
+# 1.(1) command for git clone
+# clone git and create wiki directories
 cmd_cr_core_git_clone="git clone https://gerrit.wikimedia.org/r/p/mediawiki/core.git $wikiName"
 
-# 1.2 원하는 브랜치로 체크아웃
+
+# 1.(2) command for checkout git
 # 원하는 버전대로 맞춰두어야 나중에 수월하다.
 cmd_cr_core_checkout="cd $wikiName && git checkout -b REL1_30 origin/REL1_30"
 
-# 1.3 작업 마지막에 할 것. composer update 동작 및 문구
+
+# 1.(3) command for composer update and image folder permission
 # composer update 를 완료하면 vendor 폴더가 생성이 된다.
+# create vender folder after composer update
 cmd_cr_core_after="composer update && chown -R apache:apache images/"
 
 # 1.E. 명령어 실행 과 composer update 동작
@@ -32,24 +41,25 @@ echo "has completed git cloning"
 sleep 0.5
 
 
-# 2. skins 및 extensions 하위 생성
-# skins 와 extensions 폴더 하위 내용 생성
-# 작업이 완료되면, skins 와 extensions 폴더 내의 파일들이 생성된다.
+# ## 2. make mediawiki skins ## 
 
-# 2번과 3번을 사용 안 하고, 한번에 스킨과 확장기능 전부를 설치하려면. 아래의 명령어를 사용한다.
+
+# 2번과 3번을 사용 안 하고, 한번에 스킨과 확장기능 전부를 한번에 설치하려면. 아래의 명령어를 사용한다.
 # git submodule update --init --recursive
-# 안전한 수동 방식으로 extension 과 skin 을 설치하자.
 
-# 2.1. Skin 받기
+
+# 2. download and clone 'mediawiki skins'
+# skins 폴더 하위 내용 생성. 나는 Vector 만 사용할 것이라서, Vector 만 생성함.
 cd $wikiPath"/skins"
 git clone https://gerrit.wikimedia.org/r/mediawiki/skins/Vector Vector && cd Vector && git checkout REL1_30
-# git clone https://gerrit.wikimedia.org/r/mediawiki/skins/Vector Vector
-# git clone https://github.com/wikimedia/mediawiki-skins-Vector Vector && cd Vector && git checkout REL1_30
 
 
-# 2.2 Extension 받기
+
+# ## 3. make mediawiki extensions ## 
+
+
+# 3.1 download and clone 'media wiki extetions' from git
 extension_list=("CharInsert" "Cite" "CiteThisPage" "ConfirmEdit" "Gadgets" "ImageMap" "InputBox" "Interwiki" "LocalisationUpdate" "Nuke" "ParserFunctions" "Poem" "Renameuser" "SpamBlacklist" "SyntaxHighlight_GeSHi" "TitleBlacklist" "WikiEditor" )
-
 for extension_name in "${extension_list[@]}"; do
 	echo $value
 	cd $wikiPath"/extensions"
@@ -59,7 +69,7 @@ for extension_name in "${extension_list[@]}"; do
 	sleep 0.5
 done
 
-# 2.3 installation other extensions
+# 3.2 download and clone other extensions
 cd $wikiPath"/extensions"
 git clone https://github.com/HydraWiki/mediawiki-embedvideo.git EmbedVideo
 
