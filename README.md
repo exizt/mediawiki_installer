@@ -1,1 +1,2 @@
 # mediawiki_installer
+test
