@@ -1,15 +1,15 @@
 #! /bin/bash
 # ####################################
-# Mediawiki 1.30 installer script (using git)
-# Version : 1.1.180220
+# Mediawiki 1.31 installer script (using git)
+# Version : 1.1.181125
 # 
 # 미디어위키를 Git 으로 설치하는 스크립트 입니다. 스크립트를 동작시키는 폴더 하위에 생성합니다.
-# git : https://github.com/exizt/mediawiki_installer
+# git : https://github.com/exizt/mediawiki_installer_script
 # ####################################
 script_dir=$(cd "$(dirname "$0")" && pwd)
 cd $script_dir
 
-wikiName="wiki_1_30"
+wikiName="wiki_1_31"
 wikiPath="$script_dir/$wikiName"
 
 
@@ -25,7 +25,7 @@ cmd_cr_core_git_clone="git clone https://gerrit.wikimedia.org/r/p/mediawiki/core
 
 # 1.(2) command for checkout git
 # 원하는 버전대로 맞춰두어야 나중에 수월하다.
-cmd_cr_core_checkout="cd $wikiName && git checkout -b REL1_30 origin/REL1_30"
+cmd_cr_core_checkout="cd $wikiName && git checkout -b REL1_31 origin/REL1_31"
 
 
 # 1.(3) command for composer update and image folder permission
@@ -51,7 +51,7 @@ sleep 0.5
 # 2. download and clone 'mediawiki skins'
 # skins 폴더 하위 내용 생성. 나는 Vector 만 사용할 것이라서, Vector 만 생성함.
 cd $wikiPath"/skins"
-git clone https://gerrit.wikimedia.org/r/mediawiki/skins/Vector Vector && cd Vector && git checkout REL1_30
+git clone https://gerrit.wikimedia.org/r/mediawiki/skins/Vector Vector && cd Vector && git checkout REL1_31
 
 
 
@@ -63,7 +63,7 @@ extension_list=("CharInsert" "Cite" "CiteThisPage" "ConfirmEdit" "Gadgets" "Imag
 for extension_name in "${extension_list[@]}"; do
 	echo $value
 	cd $wikiPath"/extensions"
-	command="git clone https://gerrit.wikimedia.org/r/p/mediawiki/extensions/${extension_name}.git && cd ${extension_name} && git checkout REL1_30"
+	command="git clone https://gerrit.wikimedia.org/r/p/mediawiki/extensions/${extension_name}.git && cd ${extension_name} && git checkout REL1_31"
 	# echo $command
 	eval $command
 	sleep 0.5
@@ -71,12 +71,13 @@ done
 
 # 3.2 download and clone other extensions
 cd $wikiPath"/extensions"
-git clone https://github.com/HydraWiki/mediawiki-embedvideo.git EmbedVideo
+# git clone https://github.com/HydraWiki/mediawiki-embedvideo.git EmbedVideo
+git clone https://github.com/wikimedia/mediawiki-extensions-Kartographer.git Kartographer
 
 
 # 4. fin
 cd $wikiPath
 echo ''
-echo 'Mediawiki 1.30 installation has been completed.'
+echo 'Mediawiki 1.31 installation has been completed.'
 
 exit 0
