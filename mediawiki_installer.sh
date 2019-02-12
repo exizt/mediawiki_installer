@@ -1,20 +1,35 @@
 #! /bin/bash
 # ####################################
-# Mediawiki 1.31 installer script (using git)
-# Version : 1.1.181125
+# MediaWiki Installer Using Git
+# @Version : 1.3.190123
+# @git : https://github.com/exizt/mediawiki_installer_script
 # 
 # 미디어위키를 Git 으로 설치하는 스크립트 입니다. 스크립트를 동작시키는 폴더 하위에 생성합니다.
-# git : https://github.com/exizt/mediawiki_installer_script
 # ####################################
+
+# ####################################
+# Configurations
+
+# git branch name for git cloning
+CF_MW_BRANCH="REL1_31"
+
+# directory name to be created
+CF_MW_DIRNAME="wiki_1_31"
+
+# mediawiki extensions
+CF_MW_EXTENSIONS=("CharInsert" "Cite" "CiteThisPage" "ConfirmEdit" "Gadgets" "ImageMap" "InputBox" "Interwiki" "LocalisationUpdate" "Nuke" "ParserFunctions" "Poem" "Renameuser" "SpamBlacklist" "SyntaxHighlight_GeSHi" "TitleBlacklist" "WikiEditor" )
+
+
+# ####################################
+# Variables
 script_dir=$(cd "$(dirname "$0")" && pwd)
 cd $script_dir
 
-wikiName="wiki_1_31"
+wikiName="$CF_MW_DIRNAME"
 wikiPath="$script_dir/$wikiName"
 
 
-
-
+# ####################################
 # ## 1. make mediawiki core ## 
 
 
@@ -25,13 +40,13 @@ cmd_cr_core_git_clone="git clone https://gerrit.wikimedia.org/r/p/mediawiki/core
 
 # 1.(2) command for checkout git
 # 원하는 버전대로 맞춰두어야 나중에 수월하다.
-cmd_cr_core_checkout="cd $wikiName && git checkout -b REL1_31 origin/REL1_31"
+cmd_cr_core_checkout="cd $wikiName && git checkout -b ${CF_MW_BRANCH} origin/${CF_MW_BRANCH}"
 
 
 # 1.(3) command for composer update and image folder permission
 # composer update 를 완료하면 vendor 폴더가 생성이 된다.
 # create vender folder after composer update
-cmd_cr_core_after="composer update && chown -R apache:apache images/"
+cmd_cr_core_after="composer update --no-dev && chown -R apache:apache images/"
 
 # 1.E. 명령어 실행 과 composer update 동작
 # execute commands (1) (2) (3)
@@ -51,7 +66,7 @@ sleep 0.5
 # 2. download and clone 'mediawiki skins'
 # skins 폴더 하위 내용 생성. 나는 Vector 만 사용할 것이라서, Vector 만 생성함.
 cd $wikiPath"/skins"
-git clone https://gerrit.wikimedia.org/r/mediawiki/skins/Vector Vector && cd Vector && git checkout REL1_31
+git clone https://gerrit.wikimedia.org/r/mediawiki/skins/Vector Vector && cd Vector && git checkout ${CF_MW_BRANCH}
 
 
 
@@ -59,11 +74,10 @@ git clone https://gerrit.wikimedia.org/r/mediawiki/skins/Vector Vector && cd Vec
 
 
 # 3.1 download and clone 'media wiki extetions' from git
-extension_list=("CharInsert" "Cite" "CiteThisPage" "ConfirmEdit" "Gadgets" "ImageMap" "InputBox" "Interwiki" "LocalisationUpdate" "Nuke" "ParserFunctions" "Poem" "Renameuser" "SpamBlacklist" "SyntaxHighlight_GeSHi" "TitleBlacklist" "WikiEditor" )
-for extension_name in "${extension_list[@]}"; do
+for extension_name in "${CF_MW_EXTENSIONS[@]}"; do
 	echo $value
 	cd $wikiPath"/extensions"
-	command="git clone https://gerrit.wikimedia.org/r/p/mediawiki/extensions/${extension_name}.git && cd ${extension_name} && git checkout REL1_31"
+	command="git clone https://gerrit.wikimedia.org/r/p/mediawiki/extensions/${extension_name}.git && cd ${extension_name} && git checkout ${CF_MW_BRANCH}"
 	# echo $command
 	eval $command
 	sleep 0.5
@@ -78,6 +92,6 @@ git clone https://github.com/wikimedia/mediawiki-extensions-Kartographer.git Kar
 # 4. fin
 cd $wikiPath
 echo ''
-echo 'Mediawiki 1.31 installation has been completed.'
+echo 'MediaWiki installation has been completed.'
 
 exit 0
