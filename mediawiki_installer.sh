@@ -11,10 +11,10 @@
 # Configurations
 
 # git branch name for git cloning
-CF_MW_BRANCH="REL1_31"
+CF_MW_BRANCH="REL1_32"
 
 # directory name to be created
-CF_MW_DIRNAME="wiki_1_31"
+CF_MW_DIRNAME="wiki_1_32"
 
 # mediawiki extensions
 CF_MW_EXTENSIONS=("CharInsert" "Cite" "CiteThisPage" "ConfirmEdit" "Gadgets" "ImageMap" "InputBox" "Interwiki" "LocalisationUpdate" "Nuke" "ParserFunctions" "Poem" "Renameuser" "SpamBlacklist" "SyntaxHighlight_GeSHi" "TitleBlacklist" "WikiEditor" )
